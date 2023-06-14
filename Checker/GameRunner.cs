@@ -15,14 +15,12 @@ namespace Checker
             _board = new Board(matrix);
          }
 
-         public void CreatePlayerPieceSet(string name1, string name2)
+         public void CreatePlayerPieceSet(IPlayer player1, IPlayer player2)
          {
             _playerPieceSet = new Dictionary<IPlayer, List<IPiece>>();
 
-            IPlayer player1 = new Player(name1);
+            
             List<IPiece> player1Pieces = new List<IPiece>();
-
-            IPlayer player2 = new Player(name2);
             List<IPiece> player2Pieces = new List<IPiece>();
 
             for(int row = 1; row <= 3; row++)
