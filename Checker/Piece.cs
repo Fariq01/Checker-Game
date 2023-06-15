@@ -36,15 +36,6 @@ namespace Checker
             return _piecePosition;
          }
 
-         //eat piece enemy
-         // public void SetCaptured(bool isCaptured)
-         // {
-         //    _isCaptured = isCaptured;
-         // }
-
-         // public bool GetCaptured()
-         // {
-         //    return _isCaptured;
-         // }
+       
     }
 }

@@ -13,9 +13,6 @@ namespace Checker
 
          public Position GetPosition();
 
-         //eat piece enemy
-        //  public void SetCaptured(bool isCaptured);
-
-        //  public bool GetCaptured();
+    
     }
 }

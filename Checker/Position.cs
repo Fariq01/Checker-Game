@@ -16,11 +16,7 @@ namespace Checker
             _column = column;
         }
 
-        // public int GetPosition()
-        // {
-        //     return _row;
-        //     return _column;
-        // }
+      
 
         public int GetRow()
         {

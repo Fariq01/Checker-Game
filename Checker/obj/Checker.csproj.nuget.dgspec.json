@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\c#masterrace\\Checker\\Checker-Game\\Checker\\Checker.csproj": {}
+    "C:\\Checker\\Checker\\Checker.csproj": {}
   },
   "projects": {
-    "C:\\c#masterrace\\Checker\\Checker-Game\\Checker\\Checker.csproj": {
+    "C:\\Checker\\Checker\\Checker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\c#masterrace\\Checker\\Checker-Game\\Checker\\Checker.csproj",
+        "projectUniqueName": "C:\\Checker\\Checker\\Checker.csproj",
         "projectName": "Checker",
-        "projectPath": "C:\\c#masterrace\\Checker\\Checker-Game\\Checker\\Checker.csproj",
-        "packagesPath": "C:\\Users\\Batch 2\\.nuget\\packages\\",
-        "outputPath": "C:\\c#masterrace\\Checker\\Checker-Game\\Checker\\obj\\",
+        "projectPath": "C:\\Checker\\Checker\\Checker.csproj",
+        "packagesPath": "C:\\Users\\7ix\\.nuget\\packages\\",
+        "outputPath": "C:\\Checker\\Checker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Batch 2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\7ix\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

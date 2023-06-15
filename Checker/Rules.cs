@@ -29,53 +29,21 @@ namespace Checker
 			return false;
 		}
 
-		public bool IsCaptureMove(IPlayer currentPlayer, Dictionary<IPlayer, List<IPiece>> playerPieceSet, Position target)
+		public bool IsCaptureMove(Dictionary<IPlayer, List<IPiece>> playerPieceSet, Position target)
 		{
-			IPlayer? opponentPlayer = null;
-			List<IPiece>? opponentPieces = null;
-			IPiece? capturedPiece = null;
-			
-			// cari opponentPlayer di dict playerpieceset
-			foreach(var player in playerPieceSet.Keys)
+			foreach(var opponentPieces in playerPieceSet.Values)
 			{
-				if(player != currentPlayer)
+	
+				if(opponentPieces.Exists(piece => piece.GetPosition() == target))
 				{
-					
-					opponentPlayer = player;
-				
+					return true;
 				}
-			}
-			// masukin opponentPieces
-			if(opponentPlayer != null)
-			
-			{
-				opponentPieces = playerPieceSet[opponentPlayer];
-			}
-			
-			//cari piece di opponentPieces yang berada di posisi target
-			foreach(var piece in opponentPieces)
-			{
-				if(piece.GetPosition() == target)
 				
-				{
-					capturedPiece = piece;
-				}
 			}
-			
-			if(capturedPiece != null)
-			
-			{
-				opponentPieces.Remove(capturedPiece);
-				//ganti pake display
-				Console.WriteLine($"{capturedPiece} is captured");	
-				
-				return true;
-							
-			}
-			
+
 			return false;
 		}
-	
+
 
 	}
 }
