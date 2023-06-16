@@ -2,6 +2,7 @@ namespace Checker
 {
 	public class Rules
 	{
+		//masih salah
 		public bool IsLegalMoves(Position target)
 		{
 			int row = target.GetRow();

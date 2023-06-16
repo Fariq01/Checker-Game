@@ -2,9 +2,9 @@ namespace Checker
 {
     public enum PieceType
     {
-        BlackMen,
-        BlackKing,
-        WhiteMen,
-        WhiteKing
+        BM,
+        BK,
+        WM,
+        WK
     }
 }

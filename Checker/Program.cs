@@ -12,7 +12,6 @@ static class Program
         IPlayer player2 = new Player("Player 2");
 
         GameRunner game = new GameRunner();
-        // game.InitializePieceOnBoard();
         game.StartGame();
 
    

@@ -8,82 +8,79 @@ namespace Checker
 		 private Position _positon;
 		 private IPlayer _currentPlayer;
 
-        public GameRunner()
-        {
-            _rules = new Rules();
-        }
+		public GameRunner()
+		{
+			_rules = new Rules();
+		}
 
 		 public void CreateBoard(int row, int column)
 		 {
 			int[,] matrix = new int[row,column];
 			_board = new Board(matrix);
-            
+			
 		 }
 
-        public void SwitchTurn(Dictionary<IPlayer, List<IPiece>> playerPieceSet)
-        {
-            IPlayer[] players = playerPieceSet.Keys.ToArray();
+		public void SwitchTurn(Dictionary<IPlayer, List<IPiece>> playerPieceSet)
+		{
+			IPlayer[] players = playerPieceSet.Keys.ToArray();
 
-            if (_currentPlayer == players[0])
-            {
-                _currentPlayer = players[1];
-            }
-            else
-            {
-                _currentPlayer = players[0];
-            }
-        }
+			if (_currentPlayer == players[0])
+			{
+				_currentPlayer = players[1];
+			}
+			else
+			{
+				_currentPlayer = players[0];
+			}
+		}
 
 		 public void InitializePieceOnBoard()
 		 {
 			_playerPieceSet = new Dictionary<IPlayer, List<IPiece>>();
 
-            // IPlayer player1 = p1;
-            // IPlayer player2 = p2;
-
-            IPlayer player1 = new Player("Player 1");;
-            IPlayer player2 = new Player("Player 2");
+			IPlayer player1 = new Player("Player 1");;
+			IPlayer player2 = new Player("Player 2");
 			
 			List<IPiece> player1Pieces = new List<IPiece>();
 			List<IPiece> player2Pieces = new List<IPiece>();
 
-			for(int row = 1; row <= 3; row++)
+			for(int row = 0; row <= 2; row++)
 			{
-				for(int col = 1; col <= 8; col += 2)
+				for(int col = 0; col <= 7; col += 2)
 				{
 					if(row % 2 != 0)
 					{
 						Position initialPosition = new Position(row, col);
-						IPiece piece = new Piece(PieceType.BlackMen, initialPosition);
+						IPiece piece = new Piece(PieceType.BM, initialPosition);
 						player1Pieces.Add(piece);
 						
 					}
 					else
 					{
 						Position initialPosition = new Position(row, col + 1);
-						IPiece piece = new Piece(PieceType.BlackMen, initialPosition);
+						IPiece piece = new Piece(PieceType.BM, initialPosition);
 						player1Pieces.Add(piece);
 					}
 				}
 		
 			}
-            
+			
 
-			for(int row = 6; row <= 8; row++)
+			for(int row = 5; row <= 7; row++)
 			{
-				for(int col = 1; col <= 8; col += 2)
+				for(int col = 0; col <= 7; col += 2)
 				{
 					if(row % 2 == 0)
 					{
-						Position initialPosition = new Position(row, col);
-						IPiece piece = new Piece(PieceType.WhiteMen, initialPosition);
+						Position initialPosition = new Position(row, col + 1);
+						IPiece piece = new Piece(PieceType.WM, initialPosition);
 						player2Pieces.Add(piece);
 						
 					}
 					else
 					{
-						Position initialPosition = new Position(row, col + 1);
-						IPiece piece = new Piece(PieceType.WhiteMen, initialPosition);
+						Position initialPosition = new Position(row, col);
+						IPiece piece = new Piece(PieceType.WM, initialPosition);
 						player2Pieces.Add(piece);
 					}
 				}
@@ -93,11 +90,7 @@ namespace Checker
 			_playerPieceSet.Add(player1, player1Pieces);
 			_playerPieceSet.Add(player2, player2Pieces);
 
-            _currentPlayer = player1;
-
-            CreateBoard(8, 8);
-
-            DisplayBoard();
+			_currentPlayer = player1;
 	
 		 }
 		 
@@ -106,162 +99,169 @@ namespace Checker
 		public IPiece CheckPieceOnPosition(Position target)
 		{
 			
-            foreach(var playerPieces in _playerPieceSet)
-            {
+			foreach(var playerPieces in _playerPieceSet)
+			{
 
-                foreach(var piece in playerPieces.Value)
-                
-                {
-                    // if(piece.Exists(piece => piece.GetPosition() == target))
-                    if (piece.GetPosition().GetRow() == target.GetRow() && piece.GetPosition().GetColumn() == target.GetColumn())
-                    
-                    {
-                        return piece; 
-                        
-                        
-                    }
-                }
+				foreach(var piece in playerPieces.Value)
+				
+				{
+					// if(piece.Exists(piece => piece.GetPosition() == target))
+					if (piece.GetPosition().GetRow() == target.GetRow() && piece.GetPosition().GetColumn() == target.GetColumn())
+					
+					{
+						return piece; 
+						
+						
+					}
+				}
 
-            }
+			}
 			
 			return null;
-            
+			
 		}
 
-        public IPlayer GetPiecePlayer(IPiece piece)
-        {
-            foreach(var player in _playerPieceSet.Keys)
-            {
-                if(_playerPieceSet[player].Contains(piece))
-                {
-                    return player;
-                }
-            }
+		public IPlayer GetPiecePlayer(IPiece piece)
+		{
+			foreach(var player in _playerPieceSet.Keys)
+			{
+				if(_playerPieceSet[player].Contains(piece))
+				{
+					return player;
+				}
+			}
 
-            return null;
-        }
+			return null;
+		}
 
 		 public void MovePiece(Position early, Position target)
 		 {
 			
-            IPiece earlyPiece = CheckPieceOnPosition(early);
-            IPiece targetPiece = CheckPieceOnPosition(target);
+			IPiece earlyPiece = CheckPieceOnPosition(early);
+			IPiece targetPiece = CheckPieceOnPosition(target);
 
 			if(_rules.IsLegalMoves(target))
 			{
+				Console.WriteLine("Move Allowed");
 				if(_rules.IsOccupied(_playerPieceSet, target))
 				{
 					if(_rules.IsCaptureMove(_playerPieceSet, target))
 					{
 						if(targetPiece != null)
-                        {
-                            IPlayer targetPlayer = GetPiecePlayer(targetPiece);
+						{
+							IPlayer targetPlayer = GetPiecePlayer(targetPiece);
 
-                            if(targetPlayer != null)
-                            {
-                                _playerPieceSet[targetPlayer].Remove(targetPiece);
-                            }
-                            
-                        }
+							if(targetPlayer != null)
+							{
+								_playerPieceSet[targetPlayer].Remove(targetPiece);
+							}
+							
+						}
 					}
 
-                    earlyPiece.SetPosition(target);
+					earlyPiece.SetPosition(target);
 					
 				}
 				
 			}
 		 }
 
-         public void DisplayBoard()
-         {
+		 public void DisplayBoard()
+		 {
+			// IPlayer player1 = new Player(p1);
+			// IPlayer player2 = new Player(p2);
+			
+			//array matrix board dari 0
+			int rows = _board.GetMatrix().GetLength(0);
+			int columns = _board.GetMatrix().GetLength(1);
 
-            // IPlayer player1 = new Player(p1);
-            // IPlayer player2 = new Player(p2);
+			Console.WriteLine("Checker:");
+			Console.WriteLine("--------------------");
 
-            
+			Console.Write("   ");
+			for (int col = 0; col <= columns; col++)
+			{
+				Console.Write($"  {col} ");
+			}
+			Console.WriteLine();
 
-            int rows = _board.GetMatrix().GetLength(0);
-            int columns = _board.GetMatrix().GetLength(1);
+			for (int row = rows ; row >= 0; row--)
+			{
+				Console.Write($"{row}");
+				for (int col = 1; col <= columns; col++)
+				{
+					Position position = new Position(row, col);
+					IPiece piece = CheckPieceOnPosition(position);
 
-            Console.WriteLine("Checker:");
-            Console.WriteLine("--------------------");
+					if (piece != null)
+					{
+						IPlayer piecePlayer = GetPiecePlayer(piece);
+						Console.Write($"[ {piece.GetPieceType()}]");
+					}
+					else
+					{
+						Console.Write("[ - ]");
+					}
+				}
 
-            Console.Write("   ");
-            for (int col = columns; col >= 0; col--)
-            {
-                Console.Write($"  {col} ");
-            }
-            Console.WriteLine();
+				Console.WriteLine();
+			}
 
-            for (int row = rows - 1 ; row >= 0; row--)
-            {
-                Console.Write($"{row + 1}  ");
-                for (int col = 0; col < columns; col++)
-                {
-                    Position position = new Position(row, col);
-                    IPiece piece = CheckPieceOnPosition(position);
+			Console.WriteLine("--------------------");
 
-                    if (piece != null)
-                    {
-                        IPlayer piecePlayer = GetPiecePlayer(piece);
-                        Console.Write($"[{piece.GetPieceType()}({piecePlayer.GetName()})]");
-                    }
-                    else
-                    {
-                        Console.Write("[ - ]");
-                    }
-                }
+		 }
 
-                Console.WriteLine();
-            }
+		 
 
-            Console.WriteLine("--------------------");
+		 public void StartGame()
+		 {
+			CreateBoard(7, 7);
+			InitializePieceOnBoard();
+			bool gameOver = false;
 
-         }
+			while (!gameOver)
+			{
+				DisplayBoard();
 
-         
+				IPlayer currentPlayer = _currentPlayer;
+				Console.WriteLine($"Player {currentPlayer.GetName()}, it's your turn.");
 
-         public void StartGame()
-         {
-            //  CreateBoard(8, 8);
+				Console.WriteLine("Enter initial row and column :");
+				int initialRow = Convert.ToInt32(Console.ReadLine());
+				int initialColumn = Convert.ToInt32(Console.ReadLine());
 
-            bool gameOver = false;
+				Console.WriteLine("Enter target row and column :");
+				int targetRow = Convert.ToInt32(Console.ReadLine());
+				int targetColumn = Convert.ToInt32(Console.ReadLine());
 
-            while (!gameOver)
-            {
-                // DisplayBoard();
+				Position initialPosition = new Position(initialRow, initialColumn);
+				Position targetPosition = new Position(targetRow, targetColumn);
+				
+				Console.WriteLine(" Debug row, col ");
+				
+				Console.WriteLine(initialPosition.GetRow());
+				Console.WriteLine(initialPosition.GetColumn());
+				Console.WriteLine(targetPosition.GetRow());
+				Console.WriteLine(targetPosition.GetColumn());
+				
 
-                IPlayer currentPlayer = _currentPlayer;
-                Console.WriteLine($"Player {currentPlayer.GetName()}, it's your turn.");
+				MovePiece(initialPosition, targetPosition);
 
-                Console.WriteLine("Enter initial row and column :");
-                int initialRow = Convert.ToInt32(Console.ReadLine());
-                int initialColumn = Convert.ToInt32(Console.ReadLine());
+				if (_playerPieceSet[_currentPlayer].Count == 0 )
+				{
+					gameOver = true;
+					Console.WriteLine("Game over!");
+					Console.WriteLine($"Player {currentPlayer.GetName()} wins!");
+				}
+				else
+				{
+				   
+					SwitchTurn(_playerPieceSet);
+				}
+			}
 
-                Console.WriteLine("Enter target row and column :");
-                int targetRow = Convert.ToInt32(Console.ReadLine());
-                int targetColumn = Convert.ToInt32(Console.ReadLine());
-
-                Position initialPosition = new Position(initialRow, initialColumn);
-                Position targetPosition = new Position(targetRow, targetColumn);
-
-                MovePiece(initialPosition, targetPosition);
-
-                if (_playerPieceSet[_currentPlayer].Count == 0 )
-                {
-                    gameOver = true;
-                    Console.WriteLine("Game over!");
-                    Console.WriteLine($"Player {currentPlayer.GetName()} wins!");
-                }
-                else
-                {
-                   
-                    SwitchTurn(_playerPieceSet);
-                }
-            }
-
-            }
-         }
+			}
+		 }
 		 
 		 
 		 
