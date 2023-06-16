@@ -17,6 +17,7 @@ namespace Checker
 		 {
 			int[,] matrix = new int[row,column];
 			_board = new Board(matrix);
+            
 		 }
 
         public void SwitchTurn(Dictionary<IPlayer, List<IPiece>> playerPieceSet)
@@ -33,12 +34,15 @@ namespace Checker
             }
         }
 
-		 public void InitializePieceOnBoard(IPlayer p1, IPlayer p2)
+		 public void InitializePieceOnBoard()
 		 {
 			_playerPieceSet = new Dictionary<IPlayer, List<IPiece>>();
 
-            IPlayer player1 = p1;
-            IPlayer player2 = p2;
+            // IPlayer player1 = p1;
+            // IPlayer player2 = p2;
+
+            IPlayer player1 = new Player("Player 1");;
+            IPlayer player2 = new Player("Player 2");
 			
 			List<IPiece> player1Pieces = new List<IPiece>();
 			List<IPiece> player2Pieces = new List<IPiece>();
@@ -90,6 +94,10 @@ namespace Checker
 			_playerPieceSet.Add(player2, player2Pieces);
 
             _currentPlayer = player1;
+
+            CreateBoard(8, 8);
+
+            DisplayBoard();
 	
 		 }
 		 
@@ -98,18 +106,23 @@ namespace Checker
 		public IPiece CheckPieceOnPosition(Position target)
 		{
 			
-			
-			foreach(var piece in _playerPieceSet.Values)
-			
-			{
-				if(piece.Exists(piece => piece.GetPosition() == target))
-				
-				{
-					return (IPiece)piece; 
-					
-					
-				}
-			}
+            foreach(var playerPieces in _playerPieceSet)
+            {
+
+                foreach(var piece in playerPieces.Value)
+                
+                {
+                    // if(piece.Exists(piece => piece.GetPosition() == target))
+                    if (piece.GetPosition().GetRow() == target.GetRow() && piece.GetPosition().GetColumn() == target.GetColumn())
+                    
+                    {
+                        return piece; 
+                        
+                        
+                    }
+                }
+
+            }
 			
 			return null;
             
@@ -165,7 +178,7 @@ namespace Checker
             // IPlayer player1 = new Player(p1);
             // IPlayer player2 = new Player(p2);
 
-            // InitializePieceOnBoard(player1, player2);
+            
 
             int rows = _board.GetMatrix().GetLength(0);
             int columns = _board.GetMatrix().GetLength(1);
@@ -174,13 +187,13 @@ namespace Checker
             Console.WriteLine("--------------------");
 
             Console.Write("   ");
-            for (int col = 1; col <= columns; col++)
+            for (int col = columns; col >= 0; col--)
             {
                 Console.Write($"  {col} ");
             }
             Console.WriteLine();
 
-            for (int row = 0; row < rows; row++)
+            for (int row = rows - 1 ; row >= 0; row--)
             {
                 Console.Write($"{row + 1}  ");
                 for (int col = 0; col < columns; col++)
@@ -208,15 +221,15 @@ namespace Checker
 
          
 
-         public void StartGame(String p1, string p2)
+         public void StartGame()
          {
-             CreateBoard(8, 8);
+            //  CreateBoard(8, 8);
 
             bool gameOver = false;
 
             while (!gameOver)
             {
-                DisplayBoard();
+                // DisplayBoard();
 
                 IPlayer currentPlayer = _currentPlayer;
                 Console.WriteLine($"Player {currentPlayer.GetName()}, it's your turn.");
@@ -234,7 +247,7 @@ namespace Checker
 
                 MovePiece(initialPosition, targetPosition);
 
-                if (_playerPieceSet[player1].Count == 0 || _playerPieceSet[player2].Count == 0)
+                if (_playerPieceSet[_currentPlayer].Count == 0 )
                 {
                     gameOver = true;
                     Console.WriteLine("Game over!");
@@ -242,7 +255,7 @@ namespace Checker
                 }
                 else
                 {
-                    // Switch turn to the other player
+                   
                     SwitchTurn(_playerPieceSet);
                 }
             }
@@ -256,4 +269,3 @@ namespace Checker
 
 
 	}
-}
