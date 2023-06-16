@@ -170,7 +170,7 @@ namespace Checker
             int rows = _board.GetMatrix().GetLength(0);
             int columns = _board.GetMatrix().GetLength(1);
 
-            Console.WriteLine("Current Board State:");
+            Console.WriteLine("Checker:");
             Console.WriteLine("--------------------");
 
             Console.Write("   ");
