@@ -5,7 +5,6 @@ namespace Checker
 		private Dictionary<IPlayer, List<IPiece>> _playerPieceSet;
 		private IBoard _board;
 		private Rules _rules;
-		private Position _positon;
 		private IPlayer _currentPlayer;
 
 		public GameRunner()
@@ -20,9 +19,10 @@ namespace Checker
 
 		}
 
-		public void SwitchTurn(Dictionary<IPlayer, List<IPiece>> playerPieceSet)
+		//langsung ngambil dari variabel
+		public void SwitchTurn()
 		{
-			IPlayer[] players = playerPieceSet.Keys.ToArray();
+			IPlayer[] players = _playerPieceSet.Keys.ToArray();
 
 			if (_currentPlayer == players[0])
 			{
@@ -34,6 +34,14 @@ namespace Checker
 			}
 		}
 
+
+   		private static void AddPiece(List<IPiece> player1Pieces, int row, int col, PieceType pieceType)
+		{
+			Position initialPos = new Position(row, col);
+			IPiece piece = new Piece(pieceType, initialPos);
+			player1Pieces.Add(piece);
+		}
+		
 		public void InitializePieceOnBoard()
 		{
 			_playerPieceSet = new Dictionary<IPlayer, List<IPiece>>();
@@ -49,17 +57,13 @@ namespace Checker
 				for (int col = 0; col <= 7; col += 2)
 				{
 					if (row % 2 == 0)
-					{
-						Position initialPos = new Position(row, col);
-						IPiece piece = new Piece(PieceType.BM, initialPos);
-						player1Pieces.Add(piece);
+					{///refactor
+						AddPiece(player1Pieces, row, col, PieceType.BM);
 
 					}
 					else
 					{
-						Position initialPos = new Position(row, col + 1);
-						IPiece piece = new Piece(PieceType.BM, initialPos);
-						player1Pieces.Add(piece);
+						AddPiece(player1Pieces, row, col + 1, PieceType.BM);
 					}
 				}
 
@@ -72,16 +76,12 @@ namespace Checker
 				{
 					if (row % 2 != 0)
 					{
-						Position initialPos = new Position(row, col + 1);
-						IPiece piece = new Piece(PieceType.WM, initialPos);
-						player2Pieces.Add(piece);
+						AddPiece(player2Pieces, row, col + 1, PieceType.WM);
 
 					}
 					else
 					{
-						Position initialPos = new Position(row, col);
-						IPiece piece = new Piece(PieceType.WM, initialPos);
-						player2Pieces.Add(piece);
+						AddPiece(player2Pieces, row, col, PieceType.WM);
 					}
 				}
 
@@ -95,6 +95,7 @@ namespace Checker
 
 		}
 
+	 
 
 
 		public IPiece GetPieceOnPosition(Position earlyPos)
@@ -141,6 +142,7 @@ namespace Checker
 					{
 						earlyPiece.SetPosition(targetPos);
 						UpdateBoard(earlyPos, targetPos);
+						Console.WriteLine("it's Legal Move !");
 						
 					}else
 					{
@@ -149,8 +151,8 @@ namespace Checker
 
 					if (_rules.IsOccupied(_playerPieceSet, targetPos))
 					{
-						Console.WriteLine("Not Occupied");
-					}
+						Console.WriteLine("It's  Occupied");
+					} 
 					
 					if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
 					{
@@ -185,7 +187,7 @@ namespace Checker
 			}
 			
 			
-		SwitchTurn(_playerPieceSet);
+		SwitchTurn();
 		}
 
 		public void DisplayBoard()
@@ -222,7 +224,7 @@ namespace Checker
 					}
 					else
 					{
-						Console.Write("[ - ]");
+						Console.Write("[   ]");
 					}
 				}
 
@@ -291,12 +293,12 @@ namespace Checker
 				Position initialPosition = new Position(initialRow, initialColumn);
 				Position targetPosition = new Position(targetRow, targetColumn);
 
-				Console.WriteLine(" Debug Early row, col ");
+				// Console.WriteLine(" Debug Early row, col ");
 
 				Console.WriteLine(initialPosition.GetRow());
 				Console.WriteLine(initialPosition.GetColumn());
 
-				Console.WriteLine(" Debug Target row, col ");
+				// Console.WriteLine(" Debug Target row, col ");
 
 				Console.WriteLine(targetPosition.GetRow());
 				Console.WriteLine(targetPosition.GetColumn());
@@ -319,10 +321,4 @@ namespace Checker
 
 		}
 	}
-
-
-
-
-
-
 }

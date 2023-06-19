@@ -2,17 +2,18 @@ namespace Checker
 {
 
 
-    public interface IPiece
-    {
+	public interface IPiece
+	{
 
-        public void SetPieceType(PieceType pieceType);
+		public void SetPieceType(PieceType pieceType);
 
-        public PieceType GetPieceType();
+		public PieceType GetPieceType();
 
-         public void SetPosition(Position position);
+//ganti bool, buat check
+		 public void SetPosition(Position position);
 
-         public Position GetPosition();
+		 public Position GetPosition();
 
-    
-    }
+	
+	}
 }
