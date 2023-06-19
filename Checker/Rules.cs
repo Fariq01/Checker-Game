@@ -52,13 +52,17 @@ namespace Checker
 				int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
 				Position capturePos = new Position(captureRow, captureCol);
 
-				foreach(var pieces in playerPieceSet.Values)
-				{
-					if(pieces.Exists(piece => piece.GetPosition().Equals(capturePos)))
+				// if(playerPieceSet == currentPlayer)
+				// {
+					foreach(var pieces in playerPieceSet.Values)
 					{
-						return true;
+						if(pieces.Exists(piece => piece.GetPosition().Equals(capturePos)))
+						{
+							return true;
+						}
 					}
-				}
+				// }
+				
 			}
 
 			return false;
