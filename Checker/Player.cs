@@ -8,7 +8,7 @@ namespace Checker
         public Player(string _name)
         {
             this._name = _name;
-            this._score = 0;
+            _score = 0;
         }
 
         public string GetName()

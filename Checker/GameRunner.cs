@@ -35,7 +35,7 @@ namespace Checker
 		}
 
 
-   		private static void AddPiece(List<IPiece> player1Pieces, int row, int col, PieceType pieceType)
+   		private static void InitialPiece(List<IPiece> player1Pieces, int row, int col, PieceType pieceType)
 		{
 			Position initialPos = new Position(row, col);
 			IPiece piece = new Piece(pieceType, initialPos);
@@ -58,12 +58,12 @@ namespace Checker
 				{
 					if (row % 2 == 0)
 					{///refactor
-						AddPiece(player1Pieces, row, col, PieceType.BM);
+						InitialPiece(player1Pieces, row, col, PieceType.BM);
 
 					}
 					else
 					{
-						AddPiece(player1Pieces, row, col + 1, PieceType.BM);
+						InitialPiece(player1Pieces, row, col + 1, PieceType.BM);
 					}
 				}
 
@@ -76,12 +76,12 @@ namespace Checker
 				{
 					if (row % 2 != 0)
 					{
-						AddPiece(player2Pieces, row, col + 1, PieceType.WM);
+						InitialPiece(player2Pieces, row, col + 1, PieceType.WM);
 
 					}
 					else
 					{
-						AddPiece(player2Pieces, row, col, PieceType.WM);
+						InitialPiece(player2Pieces, row, col, PieceType.WM);
 					}
 				}
 
@@ -133,6 +133,7 @@ namespace Checker
 		{
 
 			IPiece earlyPiece = GetPieceOnPosition(earlyPos);
+			// IPiece targetPiece = GetPieceOnPosition(targetPos);
 
 			if(earlyPiece != null)
 			{
@@ -140,25 +141,31 @@ namespace Checker
 				{
 					if (_rules.IsLegalMove(earlyPiece, targetPos))
 					{
-						earlyPiece.SetPosition(targetPos);
-						UpdateBoard(earlyPos, targetPos);
-						Console.WriteLine("it's Legal Move !");
+						if (_rules.IsOccupied(_playerPieceSet, targetPos))
+						{
+							Console.WriteLine("It's  Occupied");
+							
+						} else
+						{
+							earlyPiece.SetPosition(targetPos);
+							_playerPieceSet[_currentPlayer].ForEach(p => { if (p == earlyPiece) p.SetPosition(targetPos); });
+							UpdateBoard(earlyPos, targetPos);
+							Console.WriteLine("it's Legal Move !");
+						}
+						
 						
 					}else
 					{
 						Console.WriteLine("Not Legal Move !");
 					}
 
-					if (_rules.IsOccupied(_playerPieceSet, targetPos))
-					{
-						Console.WriteLine("It's  Occupied");
-					} 
+	
 					
 					if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
 					{
 						int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
 						int captureCol = (earlyPos.GetRow() + targetPos.GetColumn()) / 2;
-						Position capturePos = new Position(captureRow, captureCol);
+						Position capturePos = new(captureRow, captureCol);
 
 						IPiece capturedPiece = GetPieceOnPosition(capturePos);
 						IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
@@ -295,13 +302,13 @@ namespace Checker
 
 				// Console.WriteLine(" Debug Early row, col ");
 
-				Console.WriteLine(initialPosition.GetRow());
-				Console.WriteLine(initialPosition.GetColumn());
+				// Console.WriteLine(initialPosition.GetRow());
+				// Console.WriteLine(initialPosition.GetColumn());
 
 				// Console.WriteLine(" Debug Target row, col ");
 
-				Console.WriteLine(targetPosition.GetRow());
-				Console.WriteLine(targetPosition.GetColumn());
+				// Console.WriteLine(targetPosition.GetRow());
+				// Console.WriteLine(targetPosition.GetColumn());
 
 
 				

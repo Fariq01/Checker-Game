@@ -7,20 +7,21 @@ namespace Checker
 			int rowDiff = Math.Abs(piece.GetPosition().GetRow() - target.GetRow());
 			int colDiff = Math.Abs(piece.GetPosition().GetColumn() - target.GetColumn());
 
-			if(rowDiff == 1 && colDiff == 1)
-			{
-				return true;
-			}
-
-			return false;
-		}
+			// sama kek if, if cek dan return boolean
+            return rowDiff == 1 && colDiff == 1;
+        }
 		
 
 		public bool IsOccupied(Dictionary<IPlayer, List<IPiece>> playerPieceSet, Position targetPos)
 		{
 			foreach(var playerPieces in playerPieceSet.Values)
 			{
-				if(playerPieces.Exists(piece => piece.GetPosition() == targetPos))
+				// if(playerPieces.Exists(piece => piece.GetPosition() == targetPos))
+				// {
+				// 	return true;
+				// }
+
+				if (playerPieces.Exists(piece => piece.GetPosition().GetRow() == targetPos.GetRow() && piece.GetPosition().GetColumn() == targetPos.GetColumn()))
 				{
 					return true;
 				}
@@ -50,15 +51,15 @@ namespace Checker
 			{
 				int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
 				int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
-				Position capturePos = new Position(captureRow, captureCol);
+				Position capturePos = new(captureRow, captureCol);
 
 					foreach(var pieces in playerPieceSet.Values)
 					{
-						if(pieces.Exists(piece => piece.GetPosition().Equals(capturePos)))
+						if(pieces.Exists(piece => piece.GetPosition() == capturePos))
 						{
 							return true;
 						}
-					}			
+					}
 			}
 
 			return false;
