@@ -54,12 +54,12 @@ namespace Checker
 
 			for (int row = 0; row <= 2; row++)
 			{
-				for (int col = 0; col <= 7; col += 2)
+				for (int col = 0; col <= _board.GetMatrix().Length; col += 2)
 				{
 					if (row % 2 == 0)
 					{///refactor
 						InitialPiece(player1Pieces, row, col, PieceType.BM);
-
+						
 					}
 					else
 					{
@@ -70,9 +70,9 @@ namespace Checker
 			}
 
 
-			for (int row = 5; row <= 7; row++)
+			for (int row = 5; row <= _board.GetMatrix().Length; row++)
 			{
-				for (int col = 0; col <= 7; col += 2)
+				for (int col = 0; col <= _board.GetMatrix().Length; col += 2)
 				{
 					if (row % 2 != 0)
 					{
@@ -164,21 +164,28 @@ namespace Checker
 					if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
 					{
 						int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
-						int captureCol = (earlyPos.GetRow() + targetPos.GetColumn()) / 2;
+						int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
 						Position capturePos = new(captureRow, captureCol);
 
+						Console.WriteLine(captureRow);
+						Console.WriteLine(captureCol);
+						
+						
 						IPiece capturedPiece = GetPieceOnPosition(capturePos);
 						IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
-
+						
+						Console.WriteLine(capturedPiece +"capturedPiece");
+						Console.WriteLine(capturedPiecePlayer + "capturedPiecePlayer");
+						
 						if(capturedPiece != null && capturedPiecePlayer != null)
 						{
 							_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
 						}
 
 						earlyPiece.SetPosition(targetPos);
-						_playerPieceSet[_currentPlayer].ForEach(piece => { if (piece == earlyPiece) piece.SetPosition(targetPos); });
+						_playerPieceSet[_currentPlayer].ForEach(piece => {if (piece == earlyPiece) piece.SetPosition(targetPos); });
 						UpdateBoard(capturePos, targetPos);
-
+					
 					}else
 					{
 						Console.WriteLine("Not Capture Move !");
@@ -214,14 +221,14 @@ namespace Checker
 			Console.Write("   ");
 			for (int col = 0; col <= columns; col++)
 			{
-				Console.Write($"  {col} ");
+				Console.Write($"{col}    ");
 			}
 			Console.WriteLine();
 
 			for (int row = rows; row >= 0; row--)
 			{
 				Console.Write($"{row}");
-				for (int col = 0; col < columns; col++)
+				for (int col = 0; col <= columns; col++)
 				{
 					Position position = new Position(row, col);
 					IPiece piece = GetPieceOnPosition(position);
@@ -247,9 +254,11 @@ namespace Checker
 		public void UpdateBoard(Position earlyPos, Position targetPos)
 		{
 			int[,] matrix = _board.GetMatrix();
-			int row = earlyPos.GetRow();
-			int col = earlyPos.GetColumn();
-			matrix[row, col] = 0;
+			// int[,] matrix = new int[8,8];
+			
+			// int row = earlyPos.GetRow();
+			// int col = earlyPos.GetColumn();
+			// matrix[row + 1, col + 1] = 0;
 
 			if(targetPos != null)
 			{
