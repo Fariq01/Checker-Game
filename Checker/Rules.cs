@@ -28,20 +28,9 @@ namespace Checker
 			}
 
 			return false;
-
-			// int[,] matrix = board.GetMatrix();
-			// int value = matrix[targetPos.GetRow(), targetPos.GetColumn()];
-		
-			// if(value == 1)
-			// {
-			// 	return true;
-			// }
-
-			// return false;
-
 		}
 
-		public bool IsCaptureMove( Dictionary<IPlayer, List<IPiece>> playerPieceSet, Position earlyPos, Position targetPos)
+		public bool IsCaptureMove(Dictionary<IPlayer, List<IPiece>> playerPieceSet, Position earlyPos, Position targetPos)
 		{
 			
 			int rowDiff = Math.Abs(earlyPos.GetRow() - targetPos.GetRow());
@@ -51,11 +40,11 @@ namespace Checker
 			{
 				int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
 				int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
-				Position capturePos = new(captureRow, captureCol);
+				// Position capturePos = new(captureRow, captureCol);
 
 					foreach(var pieces in playerPieceSet.Values)
 					{
-						if(pieces.Exists(piece => piece.GetPosition() == capturePos))
+						if(pieces.Exists(piece => piece.GetPosition().GetRow() == captureRow && piece.GetPosition().GetColumn() == captureCol))
 						{
 							return true;
 						}
@@ -63,25 +52,6 @@ namespace Checker
 			}
 
 			return false;
-
-			// int rowDiff = Math.Abs(piece.GetPosition().GetRow() - targetPos.GetRow());
-			// int colDiff = Math.Abs(piece.GetPosition().GetColumn() - targetPos.GetColumn());
-
-			// if(rowDiff == 2 && colDiff == 2)
-			// {
-			// 	int captureRow = (piece.GetPosition().GetRow() + targetPos.GetRow()) / 2;
-			// 	int captureCol = (piece.GetPosition().GetColumn() + targetPos.GetColumn()) / 2;
-			// 	Position capturePos = new Position(captureRow, captureCol);
-
-			// 	if(IsOccupied(board, capturePos))
-			// 	{
-			// 		return true;
-			// 	}
-			// }
-
-			// return false;
 		}
-
-
 	}
 }

@@ -148,7 +148,7 @@ namespace Checker
 						} else
 						{
 							earlyPiece.SetPosition(targetPos);
-							_playerPieceSet[_currentPlayer].ForEach(p => { if (p == earlyPiece) p.SetPosition(targetPos); });
+							_playerPieceSet[_currentPlayer].ForEach(piece => { if (piece == earlyPiece) piece.SetPosition(targetPos); });
 							UpdateBoard(earlyPos, targetPos);
 							Console.WriteLine("it's Legal Move !");
 						}
@@ -175,6 +175,8 @@ namespace Checker
 							_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
 						}
 
+						earlyPiece.SetPosition(targetPos);
+						_playerPieceSet[_currentPlayer].ForEach(piece => { if (piece == earlyPiece) piece.SetPosition(targetPos); });
 						UpdateBoard(capturePos, targetPos);
 
 					}else
@@ -193,7 +195,7 @@ namespace Checker
 				Console.WriteLine("No Piece Found On The Specified Position !");
 			}
 			
-			
+		// _playerPieceSet[_currentPlayer].RemoveAll(piece => piece.GetPosition().Equals(targetPos));
 		SwitchTurn();
 		}
 
@@ -226,7 +228,7 @@ namespace Checker
 
 					if (piece != null)
 					{
-						IPlayer piecePlayer = GetPlayerFromPiece(piece);
+						// IPlayer piecePlayer = GetPlayerFromPiece(piece);
 						Console.Write($"[ {piece.GetPieceType()}]");
 					}
 					else
@@ -286,8 +288,8 @@ namespace Checker
 			{
 				DisplayBoard();
 
-				IPlayer currentPlayer = _currentPlayer;
-				Console.WriteLine($"Player {currentPlayer.GetName()}, it's your turn.");
+				// IPlayer currentPlayer = _currentPlayer;
+				Console.WriteLine($"Player {_currentPlayer.GetName()}, it's your turn.");
 
 				Console.WriteLine("Enter initial row and column :");
 				int initialRow = Convert.ToInt32(Console.ReadLine());
@@ -309,15 +311,12 @@ namespace Checker
 
 				// Console.WriteLine(targetPosition.GetRow());
 				// Console.WriteLine(targetPosition.GetColumn());
-
-
-				
-				
+	
 				if (_playerPieceSet[_currentPlayer].Count == 0)
 				{
 					gameOver = true;
 					Console.WriteLine("Game over!");
-					Console.WriteLine($"Player {currentPlayer.GetName()} wins!");
+					Console.WriteLine($"Player {_currentPlayer.GetName()} wins!");
 				}
 				else
 				{
