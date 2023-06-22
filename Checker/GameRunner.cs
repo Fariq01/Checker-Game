@@ -4,7 +4,7 @@ namespace Checker
 	{
 		private Dictionary<IPlayer, List<IPiece>> _playerPieceSet;
 		private IBoard _board;
-		private Rules _rules;
+		private readonly Rules _rules;
 		private IPlayer _currentPlayer;
 
 		public GameRunner()
@@ -129,6 +129,21 @@ namespace Checker
 			return null;
 		}
 
+		public Position GetCapturePosition(IPiece piece, Position currentPosition)
+		{
+			int rowDiff = Math.Abs(currentPosition.GetRow() - piece.GetPosition().GetRow());
+			int colDiff = Math.Abs(currentPosition.GetColumn() - piece.GetPosition().GetColumn());
+
+			if (rowDiff == 2 && colDiff == 2)
+			{
+				int captureRow = (currentPosition.GetRow() + piece.GetPosition().GetRow()) / 2;
+				int captureCol = (currentPosition.GetColumn() + piece.GetPosition().GetColumn()) / 2;
+				return new Position(captureRow, captureCol);
+			}
+
+			return null;
+		}
+
 		public void MovePiece(Position earlyPos, Position targetPos)
 		{
 
@@ -139,7 +154,8 @@ namespace Checker
 			{
 				if(GetPlayerFromPiece(earlyPiece) == _currentPlayer)
 				{
-					if (_rules.IsLegalMove(earlyPiece, targetPos))
+					if (_rules.IsLegalMove(earlyPiece, targetPos) || _rules.IsOccupied(_playerPieceSet, targetPos) ||
+					 _rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos) || _rules.IsWorthyToBeKing(earlyPiece.GetPieceType(),targetPos, _board))
 					{
 						if (_rules.IsOccupied(_playerPieceSet, targetPos))
 						{
@@ -149,49 +165,102 @@ namespace Checker
 						{
 							earlyPiece.SetPosition(targetPos);
 							_playerPieceSet[_currentPlayer].ForEach(piece => { if (piece == earlyPiece) piece.SetPosition(targetPos); });
-							UpdateBoard(earlyPos, targetPos);
+							// UpdateBoard(earlyPos, targetPos);
 							Console.WriteLine("it's Legal Move !");
 						}
+
+						bool canCaptureAgain = true;
+						Position currentPos = targetPos;
+
+						while(canCaptureAgain)
+						{
+							if (_rules.IsCaptureMove(_playerPieceSet, currentPos, targetPos))
+							{
+								int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
+								int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
+								Position capturePos = new(captureRow, captureCol);
+
+								Console.WriteLine(captureRow);
+								Console.WriteLine(captureCol);
+								
+								
+								IPiece capturedPiece = GetPieceOnPosition(capturePos);
+								IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
+								
+								Console.WriteLine(capturedPiece +"capturedPiece");
+								Console.WriteLine(capturedPiecePlayer + "capturedPiecePlayer");
+							
+								if(capturedPiece != null && capturedPiecePlayer != null)
+								{
+									_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
+								}
+
+								earlyPiece.SetPosition(targetPos);
+								_playerPieceSet[_currentPlayer].ForEach(piece => {if (piece == earlyPiece) piece.SetPosition(targetPos); });
+								// UpdateBoard(capturePos, targetPos);
+					
+							}else
+							{
+								Console.WriteLine("Not Capture Move !");
+							}
+
+						}
+
+						// if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
+						// {
+						// 	int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
+						// 	int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
+						// 	Position capturePos = new(captureRow, captureCol);
+
+						// 	Console.WriteLine(captureRow);
+						// 	Console.WriteLine(captureCol);
+							
+							
+						// 	IPiece capturedPiece = GetPieceOnPosition(capturePos);
+						// 	IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
+							
+						// 	Console.WriteLine(capturedPiece +"capturedPiece");
+						// 	Console.WriteLine(capturedPiecePlayer + "capturedPiecePlayer");
 						
+						// 	if(capturedPiece != null && capturedPiecePlayer != null)
+						// 	{
+						// 		_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
+						// 	}
+
+						// 	earlyPiece.SetPosition(targetPos);
+						// 	_playerPieceSet[_currentPlayer].ForEach(piece => {if (piece == earlyPiece) piece.SetPosition(targetPos); });
+						// 	// UpdateBoard(capturePos, targetPos);
+				
+						// }else
+						// {
+						// 	Console.WriteLine("Not Capture Move !");
+						// }
+
 						
+
+						if(_rules.IsWorthyToBeKing(earlyPiece.GetPieceType(),targetPos, _board))
+						{
+							if(earlyPiece.GetPieceType() == PieceType.BM)
+							{
+								earlyPiece.SetPieceType(PieceType.BK);
+								Console.WriteLine("Promoted to Black King !");
+								
+							}
+							else if(earlyPiece.GetPieceType() == PieceType.WM)
+							{
+								earlyPiece.SetPieceType(PieceType.WK);
+								Console.WriteLine("Promoted to White King !");
+							}
+							// UpdateBoard(earlyPos, targetPos);
+						}
+						
+					UpdateBoard(earlyPos, targetPos);
+					SwitchTurn();	
 					}else
 					{
 						Console.WriteLine("Not Legal Move !");
 					}
-
 	
-					
-					if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
-					{
-						int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
-						int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
-						Position capturePos = new(captureRow, captureCol);
-
-						Console.WriteLine(captureRow);
-						Console.WriteLine(captureCol);
-						
-						
-						IPiece capturedPiece = GetPieceOnPosition(capturePos);
-						IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
-						
-						Console.WriteLine(capturedPiece +"capturedPiece");
-						Console.WriteLine(capturedPiecePlayer + "capturedPiecePlayer");
-						
-						if(capturedPiece != null && capturedPiecePlayer != null)
-						{
-							_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
-						}
-
-						earlyPiece.SetPosition(targetPos);
-						_playerPieceSet[_currentPlayer].ForEach(piece => {if (piece == earlyPiece) piece.SetPosition(targetPos); });
-						UpdateBoard(capturePos, targetPos);
-					
-					}else
-					{
-						Console.WriteLine("Not Capture Move !");
-					}
-
-					
 			 	}else
 				{
 					Console.WriteLine("It's not your turn");
@@ -201,10 +270,8 @@ namespace Checker
 			{
 				Console.WriteLine("No Piece Found On The Specified Position !");
 			}
-			
-		// _playerPieceSet[_currentPlayer].RemoveAll(piece => piece.GetPosition().Equals(targetPos));
-		SwitchTurn();
 		}
+
 
 		public void DisplayBoard()
 		{
@@ -253,8 +320,8 @@ namespace Checker
 
 		public void UpdateBoard(Position earlyPos, Position targetPos)
 		{
-			int[,] matrix = _board.GetMatrix();
-			// int[,] matrix = new int[8,8];
+			// int[,] matrix = _board.GetMatrix();
+			int[,] matrix = new int[8,8];
 			
 			// int row = earlyPos.GetRow();
 			// int col = earlyPos.GetColumn();

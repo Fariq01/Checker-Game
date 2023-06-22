@@ -2,12 +2,42 @@ namespace Checker
 {
 	public class Rules
 	{
-		public bool IsLegalMove(IPiece piece, Position target)
+
+		public bool IsWorthyToBeKing(PieceType pieceType, Position targetPos, IBoard board)
 		{
-			int rowDiff = Math.Abs(piece.GetPosition().GetRow() - target.GetRow());
-			int colDiff = Math.Abs(piece.GetPosition().GetColumn() - target.GetColumn());
+			int row = board.GetMatrix().GetLength(0);
+			int col = board.GetMatrix().GetLength(1) - 1;
+
+            if(pieceType == PieceType.BM && targetPos.GetRow() == row)
+			{
+				return true;
+			}
+
+			if(pieceType == PieceType.WM && targetPos.GetRow() == 0)
+			{
+				return true;
+			}
+
+			return false;
+        }
+
+		public bool IsCanDoKingMove(IPiece piece, Position targetPos)
+		{
+			int rowDiff = Math.Abs(piece.GetPosition().GetRow() - targetPos.GetRow());
+			int colDiff = Math.Abs(piece.GetPosition().GetColumn() - targetPos.GetColumn());
 
 			// sama kek if, if cek dan return boolean
+            return rowDiff == 1 && colDiff == 1;
+		}
+
+		public bool IsLegalMove(IPiece piece, Position targetPos)
+		{
+			int rowDiff = Math.Abs(piece.GetPosition().GetRow() - targetPos.GetRow());
+			int colDiff = Math.Abs(piece.GetPosition().GetColumn() - targetPos.GetColumn());
+
+
+            // sama kek if, if cek dan return boolean
+
             return rowDiff == 1 && colDiff == 1;
         }
 		
@@ -53,5 +83,6 @@ namespace Checker
 
 			return false;
 		}
+
 	}
 }
