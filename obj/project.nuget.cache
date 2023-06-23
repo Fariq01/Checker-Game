@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DN8PXFYvBBCtnPftCEYCnXlmjUe4FVYYP8GZdWPp8npJVJnLxXCR/tx1pyV1lK0Ffwtydywi4dfVbkYX5qO1NA==",
+  "dgSpecHash": "CTGcZjtnaOISuMkR7jE9W80gJbGPKNATaf9yN6CPqdUQy45oMcdyFz97k44UgC1Jend2q/rdr7xyw9oAJTluRA==",
   "success": true,
-  "projectFilePath": "C:\\Checker\\Checker-Game\\Checker.csproj",
+  "projectFilePath": "C:\\c#masterrace\\Checker\\Checker-Game\\Checker.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -151,7 +151,7 @@ namespace Checker
 
 		public Position GetNextCapturePosition(IPiece piece, Position earlyPos)
 		{
-			List<Position> capturePos = new List<Position>();
+			// List<Position> capturePos = new List<Position>();
 
 			int rowDiff = Math.Abs(earlyPos.GetRow() - piece.GetPosition().GetRow());
 			int colDiff = Math.Abs(earlyPos.GetColumn() - piece.GetPosition().GetColumn());
@@ -206,37 +206,41 @@ namespace Checker
 							Console.WriteLine("it's Legal Move !");
 						}
 
-						// bool canCaptureAgain = true;
+						bool canCaptureAgain = true;
 						Position currentPos = targetPos;
-						bool canCaptureAgain = _rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos);
-
-						while (canCaptureAgain)
+						// bool canCaptureAgain = _rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos);
+						if(_rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos))
 						{
-							// Get the next capture position
-							Position nextCapturePos = GetNextCapturePosition(earlyPiece, currentPos);
-
-							if (nextCapturePos != null)
+							while (_rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos))
 							{
-						
-								IPiece capturedPiece = CapturedPiece(currentPos, nextCapturePos);
-								Console.WriteLine("Captured opponent's piece!");
+								// Get next capture position 
+								Position nextCapturePos = GetNextCapturePosition(earlyPiece, currentPos);
 
+								if (nextCapturePos != null)
+								{
 							
-								IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
-								_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
+									IPiece capturedPiece = CapturedPiece(currentPos, nextCapturePos);
+									Console.WriteLine("Captured opponent's piece!");
 
-							
-								currentPos = nextCapturePos;
+								
+									IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
+									_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
 
-							
-								canCaptureAgain = _rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos);
-							}
-							else
-							{
-								Console.WriteLine("No more capture moves available!");
-								canCaptureAgain = false;
+								
+									currentPos = nextCapturePos;
+
+
+									// canCaptureAgain = _rules.IsCaptureMove(_playerPieceSet, targetPos, currentPos);
+									
+								}
+								else
+								{
+									Console.WriteLine("No more capture moves available!");
+									// canCaptureAgain = false;
+								}
 							}
 						}
+					
 
 						// if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
 						// {
