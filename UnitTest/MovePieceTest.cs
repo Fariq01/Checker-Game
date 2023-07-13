@@ -11,7 +11,7 @@ namespace Checker_Game.UnitTest
         {
             var game = new GameRunner();
             game.CreateBoard(7,7);
-            game.InitializePieceOnBoard();
+            game.InitializePieceOnBoard("Budi","Ilham");
 
             var initialRow = 2;
             var initialCol = 0;

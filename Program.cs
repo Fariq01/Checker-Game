@@ -8,10 +8,15 @@ static class Program
     static void Main()
     {
 
-        // IPlayer player1 = new Player("Player 1");
-        // IPlayer player2 = new Player("Player 2");
+        Console.WriteLine("Enter the name for Player 1:");
+    	string player1Name = Console.ReadLine();
+
+        Console.WriteLine("Enter the name for Player 2:");
+    	string player2Name = Console.ReadLine();
 
         GameRunner game = new GameRunner(); 
+        game.CreateBoard(7,7);
+        game.InitializePieceOnBoard(player1Name, player2Name);
         game.StartGame();
 
     }   

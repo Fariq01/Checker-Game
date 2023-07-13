@@ -1,3 +1,4 @@
+using Loggerc;
 namespace Checker
 {
 	public class GameRunner
@@ -6,10 +7,14 @@ namespace Checker
 		private IBoard _board;
 		private readonly Rules _rules;
 		private IPlayer _currentPlayer;
+		// private ILogger logger;
 
 		public GameRunner()
 		{
 			_rules = new Rules();
+			Logger.Configure();
+
+
 		}
 
 		public void CreateBoard(int row, int column)
@@ -42,12 +47,12 @@ namespace Checker
 			player1Pieces.Add(piece);
 		}
 		
-		public void InitializePieceOnBoard()
+		public void InitializePieceOnBoard(string player1Name, string player2Name)
 		{
 			_playerPieceSet = new Dictionary<IPlayer, List<IPiece>>();
-
-			IPlayer player1 = new Player("Player 1");
-			IPlayer player2 = new Player("Player 2");
+			
+			IPlayer player1 = new Player(player1Name);
+			IPlayer player2 = new Player(player2Name);
 
 			List<IPiece> player1Pieces = new List<IPiece>();
 			List<IPiece> player2Pieces = new List<IPiece>();
@@ -190,23 +195,18 @@ namespace Checker
 		{
 
 			IPiece earlyPiece = GetPieceOnPosition(earlyPos);
-			// IPiece targetPiece = GetPieceOnPosition(targetPos);
 
 			if(earlyPiece != null)
 			{
 				if(GetPlayerFromPiece(earlyPiece) == _currentPlayer)
 				{
-					// Position currentPos = earlyPos;
-					// Position nextCapturePos = GetNextCapturePosition(earlyPiece, targetPos);
-					// Position? nextCapturePos = null;
-            		// bool canCaptureAgain = true;
 				
 					if (_rules.IsLegalMove(earlyPiece, targetPos) || _rules.IsOccupied(_playerPieceSet, targetPos) ||
                      (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos) && earlyPos != targetPos) || _rules.IsWorthyToBeKing(earlyPiece.GetPieceType(),targetPos, _board) )
 					{
 						if (_rules.IsOccupied(_playerPieceSet, targetPos))
 						{
-							Console.WriteLine("It's  Occupied");
+							Logger.Debug("It's  Occupied");
 							
 						} else
 						{
@@ -216,8 +216,8 @@ namespace Checker
 								if (piece == earlyPiece)
 								 piece.SetPosition(targetPos);
 							});
-							// UpdateBoard(earlyPos, targetPos);
-							Console.WriteLine("it's Legal Move !");
+						
+							Logger.Debug("it's Legal Move !");
 						}
 
 						if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
@@ -225,16 +225,9 @@ namespace Checker
 							int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
 							int captureCol = (earlyPos.GetColumn() + targetPos.GetColumn()) / 2;
 							Position capturePos = new(captureRow, captureCol);
-
-							// Console.WriteLine(captureRow);
-							// Console.WriteLine(captureCol);
-							
-							
+			
 							IPiece capturedPiece = GetPieceOnPosition(capturePos);
 							IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
-							
-							// Console.WriteLine(capturedPiece +"capturedPiece");
-							// Console.WriteLine(capturedPiecePlayer + "capturedPiecePlayer");
 						
 							if(capturedPiece != null && capturedPiecePlayer != null)
 							{
@@ -244,7 +237,7 @@ namespace Checker
 							earlyPiece.SetPosition(targetPos);
 							_playerPieceSet[_currentPlayer].ForEach(piece => {if (piece == earlyPiece) piece.SetPosition(targetPos); });
 
-							Console.WriteLine("Enter Next Target Position : ");
+							Logger.Debug("Enter Next Target Position : ");
 							// string input = Console.ReadLine();
 
 							// string[] coordinates = input.Split(' ');
@@ -258,7 +251,7 @@ namespace Checker
 				
 						}else
 						{
-							Console.WriteLine("Not Capture Move !");
+							Logger.Debug("Not Capture Move !");
 						}
 
 						
@@ -268,13 +261,13 @@ namespace Checker
 							if(earlyPiece.GetPieceType() == PieceType.BM)
 							{
 								earlyPiece.SetPieceType(PieceType.BK);
-								Console.WriteLine("Promoted to Black King !");
+								Logger.Debug("Promoted to Black King !");
 								
 							}
 							else if(earlyPiece.GetPieceType() == PieceType.WM)
 							{
 								earlyPiece.SetPieceType(PieceType.WK);
-								Console.WriteLine("Promoted to White King !");
+								Logger.Debug("Promoted to White King !");
 							}
 							// UpdateBoard(earlyPos, targetPos);
 						}
@@ -283,17 +276,17 @@ namespace Checker
 					SwitchTurn();
 					}else
 					{
-						Console.WriteLine("Not Legal Move !");
+						Logger.Debug("Not Legal Move !");
 					}
 					
 			 	}else
 				{
-					Console.WriteLine("It's not your turn");
+					Logger.Debug("It's not your turn");
 				}
 				
 			}else
 			{
-				Console.WriteLine("No Piece Found On The Specified Position !");
+				Logger.Debug("No Piece Found On The Specified Position !");
 			}
 		}
 
@@ -381,15 +374,14 @@ namespace Checker
 
 		public void StartGame()
 		{
-			CreateBoard(7, 7);
-			InitializePieceOnBoard();
+			// CreateBoard(7, 7);
+			// InitializePieceOnBoard();
 			bool gameOver = false;
 
 			while (!gameOver)
 			{
 				DisplayBoard();
 
-				// IPlayer currentPlayer = _currentPlayer;
 				Console.WriteLine($"Player {_currentPlayer.GetName()}, it's your turn.");
 
 				Console.WriteLine("Enter initial row and column :");
