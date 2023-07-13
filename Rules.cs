@@ -6,7 +6,7 @@ namespace Checker
 		public bool IsWorthyToBeKing(PieceType pieceType, Position targetPos, IBoard board)
 		{
 			int row = board.GetMatrix().GetLength(0);
-			int col = board.GetMatrix().GetLength(1) - 1;
+			// int col = board.GetMatrix().GetLength(1) - 1;
 
             if(pieceType == PieceType.BM && targetPos.GetRow() == row)
 			{

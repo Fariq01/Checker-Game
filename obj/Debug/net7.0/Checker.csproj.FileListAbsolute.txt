@@ -33,3 +33,11 @@ C:\Checker\Checker-Game\obj\Debug\net7.0\refint\Checker.dll
 C:\Checker\Checker-Game\obj\Debug\net7.0\Checker.pdb
 C:\Checker\Checker-Game\obj\Debug\net7.0\Checker.genruntimeconfig.cache
 C:\Checker\Checker-Game\obj\Debug\net7.0\ref\Checker.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.runner.reporters.netcoreapp10.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.runner.utility.netcoreapp10.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.abstractions.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.assert.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.core.dll
+c:\Checker\Checker-Game\bin\Debug\net7.0\xunit.execution.dotnet.dll
+c:\Checker\Checker-Game\obj\Debug\net7.0\Checker.csproj.CopyComplete

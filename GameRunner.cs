@@ -220,29 +220,6 @@ namespace Checker
 							Console.WriteLine("it's Legal Move !");
 						}
 
-						// nextCapturePos = GetNextCapturePosition(earlyPiece, targetPos);
-
-					//  if (nextCapturePos != null)
-                	//  {
-					// 	while (nextCapturePos != null && _rules.IsCaptureMove(_playerPieceSet, currentPos, nextCapturePos))
-					// 	{
-					// 		IPiece capturedPiece = CapturedPiece(currentPos, nextCapturePos);
-					// 		if (capturedPiece != null)
-					// 		{
-					// 			IPlayer capturedPiecePlayer = GetPlayerFromPiece(capturedPiece);
-					// 			if (capturedPiecePlayer != null)
-					// 			{
-					// 				_playerPieceSet[capturedPiecePlayer].Remove(capturedPiece);
-					// 			}
-					// 		}
-
-					// 		// Lakukan tindakan lain yang diperlukan
-
-					// 		currentPos = nextCapturePos;
-					// 		nextCapturePos = GetNextCapturePosition(earlyPiece, nextCapturePos);
-					// 	}
-					// }
-
 						if (_rules.IsCaptureMove(_playerPieceSet, earlyPos, targetPos))
 						{
 							int captureRow = (earlyPos.GetRow() + targetPos.GetRow()) / 2;
@@ -426,15 +403,6 @@ namespace Checker
 				Position initialPosition = new Position(initialRow, initialColumn);
 				Position targetPosition = new Position(targetRow, targetColumn);
 
-				// Console.WriteLine(" Debug Early row, col ");
-
-				// Console.WriteLine(initialPosition.GetRow());
-				// Console.WriteLine(initialPosition.GetColumn());
-
-				// Console.WriteLine(" Debug Target row, col ");
-
-				// Console.WriteLine(targetPosition.GetRow());
-				// Console.WriteLine(targetPosition.GetColumn());
 
 			if (_playerPieceSet[_currentPlayer].Count == 0)
 				{
